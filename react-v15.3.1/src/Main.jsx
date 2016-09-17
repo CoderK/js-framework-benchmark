@@ -90,7 +90,8 @@ export class Main extends React.Component{
         let rows = this.state.store.data.map((d,i) => {
             return <Row key={d.id} data={d} onClick={this.select} onDelete={this.delete} styleClass={d.id === this.state.store.selected ? 'danger':''}></Row>
         });
-        return (<div className="container">
+        return (
+          <div className="container">
             <div className="jumbotron">
                 <div className="row">
                     <div className="col-md-6">
@@ -126,6 +127,7 @@ export class Main extends React.Component{
                 </tbody>
             </table>
             <span className="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </div>);
+            </div>
+        );
     }
 }

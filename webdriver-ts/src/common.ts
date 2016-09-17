@@ -32,26 +32,6 @@ function f(name: string, uri: string = null): FrameworkData
 export let frameworks = [
     f("angular-v1.5.8"),
     f("angular-v2.0.0-rc5"),
-    f("aurelia-v1.0.0", "aurelia-v1.0.0/dist"),
-    f("bobril-v4.44.1"),
-    f("cyclejs-v7.0.0"),
-    f("domvm-v1.2.10"),
-    f("inferno-v0.7.26"),
-    f("inferno-v1.0.0-alpha7"),
-    f("kivi-v1.0.0-rc0"),
-    f("mithril-v0.2.5"),
-    f("mithril-v1.0.0-alpha"),
-    f("plastiq-v1.33.0"),
-    f("preact-v6.0.2"),
-    f("ractive-v0.7.3"),
-    f("ractive-edge"),
-    f("react-lite-v0.15.17"),
     f("react-v15.3.1"),
-    f("react-v15.3.1-mobX-v2.5.0"),
-    f("riot-v2.6.1"),
-    f("tsers-v1.0.0"),
-    f("vanillajs"),
-    f("vidom-v0.3.18"),
-    f("vue-v1.0.26"),
-    f("vue-v2.0.0-beta1")        
+    f("vanillajs")
 ];

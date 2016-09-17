@@ -1,5 +1,9 @@
 # js-framework-benchmark
 
+> **NOTE:**
+> This is the forked version of [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark), removed all runner except for angular, angular2 and react.
+
+
 This is a simple benchmark for several javascript frameworks. The benchmarks creates a large table with randomized entries and measures the time for various operations.
 
 This work is derived from a benchmark that Richard Ayotte published on https://gist.github.com/RichAyotte/a7b8780341d5e75beca7 and adds more framework and more operations. Thanks for the great work.
@@ -21,9 +25,9 @@ You will also need *java* (>=6, e.g. openjdk-8-jre on ubuntu) for the google clo
 
 The latter calls npm build-prod in each subproject.
 
-* To build a single benchmark for a framework, e.g. aurelia
+* To build a single benchmark for a framework, e.g. angular-v2.0.0-rc5
 
-`cd aurelia`
+`cd angular-v2.0.0-rc5`
 
 `npm install`
 

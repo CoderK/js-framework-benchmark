@@ -15,7 +15,7 @@
     "client",
     "react",
     "angular",
-    "mithril"
+    "angular2"
   ],
   "repository": {
     "type": "git",
