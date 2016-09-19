@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8" />
+<head>
+  <title>Table Report</title>
+  <link rel="stylesheet" href="../css/github-markdown.css">
+  <style>
+    .axis {
+      font: 10px sans-serif;
+    }
+    .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+  </style>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body class="markdown-body">
+<h3>Duration in milliseconds (Slowdown = Duration / Fastest)</h3>
+<div id='duration-chart'></div>
+
+<h3>Memory allocation in MBs</h3>
+<div id='memory-chart'></div>
+
+<script>
+var cpubenchData = {{= it.cpubenchData }};
+var membenchData = {{= it.membenchData }};
+
+function appendChartNode(parentNode, idx) {
+  var div = document.createElement('div');
+  div.id = 'chart' + idx;
+  parentNode.appendChild(div);
+}
+
+function renderBarChart(options) {
+  var data = options.data;
+  var margin = {top: 30, right: 20, bottom: 70, left: 40};
+  var width = 600 - margin.left - margin.right;
+  var height = 300 - margin.top - margin.bottom;
+  var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+  var y = d3.scale.linear().range([height, 0]);
+  var ymax = d3.max(data.means, function(d) { return parseInt(d.value, 10); });
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickSize(0);
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickSize(0);
+
+  var svg = d3
+    .select(options.selector)
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(data.means.map(function(d) { return d.name; }));
+    y.domain([0, ymax + (ymax * 0.3)]);
+
+    svg
+      .append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("text-decoration", "underline")
+        .text(data.description);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+      .selectAll("text")
+        .style("text-anchor", "middle")
+        .attr("dy", "1.0em");
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("y", -15)
+        .attr("x", 25)
+        .attr("dy", ".50em")
+        .style("text-anchor", "end")
+        .text(options.yLabel);
+
+    svg.selectAll("bar")
+        .data(data.means)
+      .enter()
+      .append("rect")
+        .attr("fill", function(d) {
+            return parseInt(d.value, 10) === ymax ? "#99355D" : "#585D98";
+        })
+        .attr("x", function(d) { return x(d.name) + 25; })
+        .attr("width", x.rangeBand() - 50)
+        .attr("y", function(d) { return y(d.value); })
+        .attr("height", function(d) { return height - y(d.value); });
+
+    svg
+      .selectAll("bar")
+      .data(data.means)
+      .enter()
+      .append("text")
+        .text(function(d) {
+          return d.value;
+        })
+        .attr("x", function(d, i) {
+          return i * (width / data.means.length) + (width / data.means.length) / 2;
+        })
+        .attr("y", function(d) {
+          return y(d.value) + 15;
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11px")
+        .attr("fill", "black")
+        .attr("text-anchor", "middle");
+}
+
+cpubenchData.forEach(function(data, idx) {
+  appendChartNode(document.getElementById('duration-chart'), idx);
+  renderBarChart({
+      selector: '#duration-chart #chart' + idx,
+      data: data,
+      yLabel: 'duration(ms)'
+    });
+});
+
+membenchData.forEach(function(data, idx) {
+  appendChartNode(document.getElementById('memory-chart'), idx);
+  renderBarChart({
+    selector: '#memory-chart #chart' + idx,
+    data: data,
+    yLabel: 'Memory(MB)'
+  });
+});
+
+</script>
+
+</body>
+</html>

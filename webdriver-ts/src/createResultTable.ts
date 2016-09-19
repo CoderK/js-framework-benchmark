@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import * as fs from 'fs';
-import {JSONResult, config} from './common'
-import {BenchmarkType, Benchmark, benchmarks} from './benchmarks'
+import { JSONResult } from './common'
+import { BenchmarkType, Benchmark, benchmarks } from './benchmarks'
 
 const dots = require('dot').process({
 	path: './'
@@ -79,16 +79,16 @@ class BenchResultList {
 }
 
 let generateBenchData = (benchmarks: Array<Benchmark>) => {
-	let benches: Array<BenchResultList> = [];
+	const benches: Array<BenchResultList> = [];
 	benchmarks.forEach((benchmark) => {
-		let bench = new BenchResultList(benchmark);
+		const bench = new BenchResultList(benchmark);
+		const values: Array<JSONResult> = [];
 
-		let values: Array<JSONResult> = [];
 		frameworks.forEach(framework => {
 			values.push(getValue(framework, benchmark.id));
 		});
 
-		let sorted = _.compact(values).map(data => {
+		const sorted = _.compact(values).map(data => {
 			return data.mean;
 		}).sort((a, b) => a - b);
 
@@ -129,21 +129,57 @@ let generateBenchData = (benchmarks: Array<Benchmark>) => {
 		benches.push(bench);
 	});
 	return benches;
-}
+};
 
-let cpubenches = generateBenchData(cpuBenchmarks);
-let membenches = generateBenchData(memBenchmarks);
+const frameworkNames = frameworks.map(framework => framework.replace('-v', ' v'));
+const cpubenches = generateBenchData(cpuBenchmarks);
+const membenches = generateBenchData(memBenchmarks);
+const geomMeans = factors.map(f => {
+	const value = Math.pow(f, 1 / cpuBenchmarkCount);
+	return { value: value.toPrecision(3), styleClass: color(value) }
+});
+const cpubenchData = cpubenches.map(bench => {
+  const means = bench.tests.map((res, idx) => {
+    return {
+      name: frameworkNames[idx],
+      value: res.mean
+    }
+  });
 
-let geomMeans = factors.map(f => {
-	let value = Math.pow(f, 1 / cpuBenchmarkCount);
-	return {value: value.toPrecision(3), styleClass: color(value)}
+  return {
+    name: bench.name,
+    description: bench.description,
+    means: means
+  };
+});
+
+const membenchData = membenches.map(bench => {
+  const means = bench.tests.map((res, idx) => {
+    return {
+      name: frameworkNames[idx],
+      value: res.mean
+    }
+  });
+
+  return {
+    name: bench.name,
+    description: bench.description,
+    means: means
+  };
 });
 
 fs.writeFileSync('./table.html', dots.table({
-	frameworks: frameworks.map(framework => framework.replace('-v', ' v')),
+	frameworks: frameworkNames,
 	cpubenches,
 	membenches,
 	geomMeans
 }), {
 	encoding: 'utf8'
-})
+});
+
+fs.writeFileSync('./graph.html', dots.graphs({
+  cpubenchData: JSON.stringify(cpubenchData),
+  membenchData: JSON.stringify(membenchData)
+}), {
+  encoding: 'utf8'
+});
