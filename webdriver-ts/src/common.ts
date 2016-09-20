@@ -29,8 +29,8 @@ function f(name: string, uri: string = null): FrameworkData {
 }
 
 export const frameworks = [
-    f("angular-v1.5.8"),
-    f("angular-v2.0.0-rc5"),
+    f("angular-v2.0.0"),
     f("react-v15.3.1"),
+    f("angular-v1.5.8"),
     f("vanillajs")
 ];
