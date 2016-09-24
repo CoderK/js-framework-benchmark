@@ -2,6 +2,9 @@
 
 > **NOTE:**
 > This is the forked version of [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark), removed all runner except for angular, angular2 and react.
+> - Angular2 : v2.0.0
+> - Angular1 : v1.5.8
+> - React: v15.3.1
 
 
 This is a simple benchmark for several javascript frameworks. The benchmarks creates a large table with randomized entries and measures the time for various operations.
