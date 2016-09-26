@@ -1,5 +1,4 @@
-import { NgModule, Component, AfterViewChecked } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Component, AfterViewChecked } from '@angular/core';
 
 interface Data {
     id: number;
@@ -71,7 +70,7 @@ let stopMeasure = function() {
 	</div>
   `
 })
-class App implements AfterViewChecked {
+export class App implements AfterViewChecked {
 	data: Array<Data> = [];
     selected: number = undefined;
     id: number = 1;
@@ -154,16 +153,5 @@ class App implements AfterViewChecked {
     ngAfterViewChecked() {
         stopMeasure();
     }
-}
+};
 
-@NgModule({
-  declarations: [
-    App
-  ],
-  imports: [
-    BrowserModule
-  ],
-  providers: [],
-  bootstrap: [App]
-})
-export class AppModule { }
